@@ -1,0 +1,33 @@
+version: '2'
+services:
+  elasticsearch:
+    image: elasticsearch:6.7.2
+    container_name: elasticsearch
+
+    expose:
+      - "9200"
+      - "9300"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+
+
+  chegg-example-service:
+      image: springio/chegg-exercise:latest
+      container_name: chegg-exercise
+      expose:
+        - "8080"
+        - "8000"
+      ports:
+        - "8080:8080"
+        - "8000:8000"
+
+      depends_on:
+        - elasticsearch
+      environment:
+        - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n
+        - GOOGLE_APPLICATION_API_KEY=<MY_API_KEY>
+        - LINKS_OF_QUESTION_FILES=https://bitbucket.org/cheggil/fullstack-home-assignment/raw/a5d09430c5781b8c15f6e887b0cfb921ca5a757c/manifest.dat
+        - SPRING_DATA_ELASTICSEARCH_CLUSTER-NODES=host.docker.internal:9300
+
+

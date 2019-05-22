@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chegg Student Questions</title>
+
+    <script>
+		function getQuestions(nextPage){
+  			var ajaxRequest = new XMLHttpRequest();
+			ajaxRequest.onreadystatechange = function(){
+
+				if(ajaxRequest.readyState == 4){
+					//the request is completed, now check its status
+					if(ajaxRequest.status == 200){
+						//turn JSON into object
+						var jsonObj = JSON.parse(ajaxRequest.responseText);
+
+						//use that object to set content and color
+						document.getElementById("output").innerHTML = JSON.stringify(jsonObj, undefined, 2) ;
+
+					}
+					else{
+						console.log("Status error: " + ajaxRequest.status);
+					}
+				}
+				else{
+					console.log("Ignored readyState: " + ajaxRequest.readyState);
+				}
+
+
+			}
+			let url;
+			let  page = document.getElementById("page").value;
+			if(nextPage!=0){
+			    page = parseInt(page) + parseInt(nextPage);
+                document.getElementById("page").value = page;
+			}
+
+			let  size = document.getElementById("size").value;
+			let  source = document.getElementById("source").value;
+			let  text = document.getElementById("text2search").value;
+
+			if(source=="any"){
+			     if(text==""){
+			     	url = "http://localhost:8080/rest/find/all?page=" + page + "&size=" + size;
+			     }else {
+			     	url = "http://localhost:8080/rest/find/text/"+text+"?page=" + page + "&size=" + size;
+			     }
+			} else {
+			    if(text==""){
+			        url = "http://localhost:8080/rest/find/source/"+source+"?page=" + page + "&size=" + size;
+			    } else {
+			        url = "http://localhost:8080/rest/find/source/"+source+"/text/"+text+"?page=" + page + "&size=" + size;
+			    }
+
+			}
+
+
+			ajaxRequest.open('GET', url);
+			ajaxRequest.send();
+		}
+
+	</script>
+</head>
+<body >
+
+<h2>Chegg Exercise Basic Page - Search Questions</h2>
+
+<input type="text" id="text2search"  alt="leave empty to search by source type"/>
+<select id="source">
+    <option value="any">ANY</option>
+    <option value="csv">CSV</option>
+    <option value="image">IMAGE</option>
+    <option value="json">JSON</option>
+</select>
+
+<BR/>
+<BR/>
+
+<input type="button" value="Prev" onclick="getQuestions(-1)"/>
+
+Page
+<input type="number" id="page" size="2" value="0"/>
+Size
+<input type="number" id="size" size="2" value="20"/>
+
+<input type="button" value="Next" onclick="getQuestions(1)"/>
+<input type="button" value="search" onclick="getQuestions(0)"/>
+
+<h4>Questions Found</h4>
+
+<BR/><BR/><BR/>
+
+<pre id="output"></pre>
+
+</body>
+</html>
