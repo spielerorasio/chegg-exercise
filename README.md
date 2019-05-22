@@ -11,7 +11,7 @@ To run this exercise do the following
 4. go to docker-compse file and set OCR API KEY under GOOGLE_APPLICATION_API_KEY
 5. docker-compose up and wait till it is up
 6. Go to http://localhost:8080/ 
-
+7. chasnge the source file of questions can be done by changing LINKS_OF_QUESTION_FILES in the docker compose
 
 
 # Supported API
