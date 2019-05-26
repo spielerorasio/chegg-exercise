@@ -6,12 +6,13 @@ To run this exercise do the following
 
 
 1. git pull this repository and cd into the chegg-exercise 
-2. cd chegg-exercise
-3. mvn clean install -DskipTests dockerfile:build 
-4. go to docker-compse file and set OCR API KEY under GOOGLE_APPLICATION_API_KEY
-5. docker-compose up and wait till it is up
-6. Go to http://localhost:8080/ 
-7. chasnge the source file of questions can be done by changing LINKS_OF_QUESTION_FILES in the docker compose
+2. docker pull elasticsearch:6.7.2
+3. cd chegg-exercise
+4. mvn clean install -DskipTests dockerfile:build 
+5. go to docker-compse file and set OCR API KEY under GOOGLE_APPLICATION_API_KEY
+6. docker-compose up and wait till it is up
+7. Go to http://localhost:8080/ 
+8. chasnge the source file of questions can be done by changing LINKS_OF_QUESTION_FILES in the docker compose
 
 
 # Supported API
