@@ -1,6 +1,7 @@
 package com.example.cheggexercise.ocr;
 
 import com.example.cheggexercise.event.CreateQuestionEvent;
+import com.example.cheggexercise.scanner.ImageValidator;
 import org.apache.logging.log4j.util.Strings;
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,6 +28,10 @@ public class OCRReaderTest {
         @Bean
         OCRFileReader ocrFileReader(){
             return  new OCRFileReaderImpl();
+        }
+        @Bean
+        ImageValidator imageValidator(){
+            return  new ImageValidator();
         }
 
         @Override

@@ -1,6 +1,7 @@
 package com.example.cheggexercise.scanner;
 
 import com.example.cheggexercise.csv.CsvFileReader;
+import com.example.cheggexercise.csv.CsvFileReaderImpl;
 import com.example.cheggexercise.json.JsonFileReader;
 import com.example.cheggexercise.ocr.OCRFileReader;
 import org.junit.Assert;
@@ -33,7 +34,7 @@ public class QuestionDataSourceScannerTest {
         }
         @Bean
         CsvFileReader csvFileReader(){
-            return Mockito.mock(CsvFileReader.class);
+            return new CsvFileReaderImpl();
         }
         @Bean
         JsonFileReader jsonFileReader(){
@@ -53,6 +54,6 @@ public class QuestionDataSourceScannerTest {
     public void copyRemoteFile() throws IOException {
         Assert.assertNotNull(questionDataSourceScanner);
         questionDataSourceScanner.startReadingQuestionDataSources();
-        verify(ocrFileReader).readQuestionFromOCR("https://s3.amazonaws.com/chegg-candidate-task/qsnapshot.png");
+        verify(ocrFileReader).readFile("https://s3.amazonaws.com/chegg-candidate-task/qsnapshot.png");
     }
 }

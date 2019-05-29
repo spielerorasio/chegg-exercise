@@ -1,10 +1,6 @@
 package com.example.cheggexercise.scanner;
 
 import com.example.cheggexercise.FileReader;
-import com.example.cheggexercise.csv.CsvFileReader;
-import com.example.cheggexercise.domain.SourceType;
-import com.example.cheggexercise.json.JsonFileReader;
-import com.example.cheggexercise.ocr.OCRFileReader;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,20 +21,15 @@ import java.util.List;
  * May 20 2019
  */
 @Component
-public class QuestionDataSourceScannerImpl implements QuestionDataSourceScanner, FileReader {
+public class QuestionDataSourceScannerImpl implements QuestionDataSourceScanner {
     private static final Logger logger = LoggerFactory.getLogger(QuestionDataSourceScannerImpl.class);
 
     @Value("${links.of.question.files:https://bitbucket.org/cheggil/fullstack-home-assignment/raw/a5d09430c5781b8c15f6e887b0cfb921ca5a757c/manifest.dat}")
     String linksURL;
 
+
     @Autowired
-    ImageValidator imageValidator;
-    @Autowired
-    CsvFileReader csvFileReader;
-    @Autowired
-    JsonFileReader jsonFileReader;
-    @Autowired
-    OCRFileReader ocrFileReader;
+    List<FileReader> readers;
 
     @EventListener(ApplicationReadyEvent.class)
     @Async
@@ -46,7 +37,7 @@ public class QuestionDataSourceScannerImpl implements QuestionDataSourceScanner,
         logger.debug("web application started");
 
         try {
-            Path path = copyRemoteFile(linksURL);
+            Path path = readers.get(0).copyRemoteFile(linksURL);
             if(path==null){
                 logger.error("question data sources link {} not found ", linksURL);
             }
@@ -58,14 +49,8 @@ public class QuestionDataSourceScannerImpl implements QuestionDataSourceScanner,
                     if (Strings.isBlank(questionDataSource)) {
                         continue;
                     }
-                    if(questionDataSource.endsWith(SourceType.csv.toString())){
-                        csvFileReader.readCsvFile(questionDataSource);
-                    }else if(questionDataSource.endsWith(SourceType.json.toString())){
-                        jsonFileReader.readJsonFile(questionDataSource);
-                    } else if(imageValidator.isImage(questionDataSource)) {
-                        ocrFileReader.readQuestionFromOCR(questionDataSource);
-                    } else { //image
-                        logger.error("questionDataSource file type {} is not supported ",linksURL);
+                    for (FileReader reader : readers) {
+                        reader.readFile(questionDataSource);
                     }
                 }
             }

@@ -14,6 +14,8 @@ import java.nio.file.Path;
  */
 public interface FileReader {
 
+    void readFile(String url) throws IOException;
+
     /**
      * Use NIO to avoid load to memory - we copy the file to tmp and delete it later
      * @param linksURL the url of the file that contain the data source

@@ -44,4 +44,11 @@ public class CsvFileReaderImpl implements CsvFileReader,FileReader {
         }
         path.toFile().delete();
     }
+
+    @Override
+    public void readFile(String url) throws IOException {
+        if(url.endsWith(SourceType.csv.toString())){
+            readCsvFile(url);
+        }
+    }
 }

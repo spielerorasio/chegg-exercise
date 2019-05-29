@@ -29,6 +29,12 @@ public class JsonFileReaderImpl implements JsonFileReader,FileReader {
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
 
+    @Override
+    public void readFile(String url) throws IOException {
+        if(url.endsWith(SourceType.json.toString())){
+            readJsonFile(url);
+        }
+    }
 
     @Override
     public void readJsonFile(String url) throws IOException {

@@ -4,6 +4,7 @@ import com.example.cheggexercise.dto.OCRResponses;
 import com.example.cheggexercise.event.CreateQuestionEvent;
 import com.example.cheggexercise.FileReader;
 import com.example.cheggexercise.domain.SourceType;
+import com.example.cheggexercise.scanner.ImageValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,15 @@ public class OCRFileReaderImpl implements OCRFileReader, FileReader {
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
 
+    @Autowired
+    ImageValidator imageValidator;
+
+    @Override
+    public void readFile(String url) throws IOException {
+        if(imageValidator.isImage(url)){
+            readQuestionFromOCR(url);
+        }
+    }
 
     @Override
     public void readQuestionFromOCR(String url) throws IOException {
@@ -47,6 +57,7 @@ public class OCRFileReaderImpl implements OCRFileReader, FileReader {
         readQuestionFromOCR(path);
         path.toFile().delete();
     }
+
 
     @Override
     public void readQuestionFromOCR(Path path) throws IOException {
